@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Convite 1 ano — Maria Valentina ❤️</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #1a0a0a;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .carousel {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a0a0a;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* Áreas clicáveis transparentes por cima das imagens */
+    .hotspot {
+      position: absolute;
+      z-index: 5;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      -webkit-tap-highlight-color: rgba(230, 57, 70, 0.3);
+    }
+
+    .dots {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+      padding: 8px 14px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transition: all 0.25s ease;
+    }
+
+    .dot.active {
+      background: #e63946;
+      transform: scale(1.25);
+      box-shadow: 0 0 8px rgba(230,57,70,0.6);
+    }
+
+    .hint {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      z-index: 20;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .hint.hide {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hint" id="hint">Deslize para o lado →</div>
+
+  <div class="carousel" id="carousel">
+    <!-- SLIDE 1 - Capa -->
+    <div class="slide" id="slide1">
+      <img src="page-1.png" alt="Capa do convite - Maria Valentina">
+      <!-- Área do selo / envelope -->
+      <a class="hotspot"
+         href="#"
+         style="left: 20%; top: 48%; width: 60%; height: 28%;"
+         aria-label="Clique no selo e descubra"
+         onclick="goToSlide(1); return false;"></a>
+    </div>
+
+    <!-- SLIDE 2 - Data e botões -->
+    <div class="slide" id="slide2">
+      <img src="page-2.png" alt="Data, horário e localização">
+
+      <!-- Confirma presença → WhatsApp -->
+      <a class="hotspot"
+         href="https://w.app/xai4qy"
+         target="_blank"
+         rel="noopener"
+         style="left: 16%; top: 6.5%; width: 68%; height: 11%;"
+         aria-label="Confirma presença"></a>
+
+      <!-- Localização → Google Maps -->
+      <a class="hotspot"
+         href="https://maps.app.goo.gl/yXvWvF5MMQHV9s6E7?g_st=ic"
+         target="_blank"
+         rel="noopener"
+         style="left: 45%; top: 21%; width: 36%; height: 8%;"
+         aria-label="Localização"></a>
+
+      <!-- Sugestão de presente → slide 3 -->
+      <a class="hotspot"
+         href="#"
+         style="left: 25%; top: 86%; width: 50%; height: 7%;"
+         aria-label="Sugestão de presente"
+         onclick="goToSlide(2); return false;"></a>
+    </div>
+
+    <!-- SLIDE 3 - Sugestão de presente -->
+    <div class="slide" id="slide3">
+      <img src="page-3.png" alt="Sugestão de presente">
+    </div>
+  </div>
+
+  <div class="dots" id="dots">
+    <div class="dot active" data-index="0"></div>
+    <div class="dot" data-index="1"></div>
+    <div class="dot" data-index="2"></div>
+  </div>
+
+  <script>
+    const carousel = document.getElementById('carousel');
+    const dots = document.querySelectorAll('.dot');
+    const hint = document.getElementById('hint');
+    let hintHidden = false;
+
+    function goToSlide(index) {
+      carousel.scrollTo({
+        left: index * carousel.clientWidth,
+        behavior: 'smooth'
+      });
+    }
+
+    function updateDots() {
+      const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    carousel.addEventListener('scroll', () => {
+      updateDots();
+      if (!hintHidden) {
+        hint.classList.add('hide');
+        hintHidden = true;
+      }
+    });
+
+    window.addEventListener('resize', updateDots);
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        goToSlide(parseInt(dot.dataset.index));
+      });
+    });
+
+    setTimeout(() => {
+      if (!hintHidden) {
+        hint.classList.add('hide');
+        hintHidden = true;
+      }
+    }, 4000);
+  </script>
+</body>
+</html>

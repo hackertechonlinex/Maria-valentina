@@ -55,7 +55,6 @@
       pointer-events: none;
     }
 
-    /* Áreas clicáveis transparentes */
     .hotspot {
       position: absolute;
       z-index: 5;
@@ -72,7 +71,6 @@
     <!-- SLIDE 1 - Capa -->
     <div class="slide">
       <img src="page-1.png" alt="Capa do convite - Maria Valentina">
-      <!-- Selo / envelope (área maior e mais centralizada) -->
       <a class="hotspot"
          href="#"
          style="left: 15%; top: 45%; width: 70%; height: 32%;"
@@ -80,35 +78,35 @@
          onclick="goToSlide(1); return false;"></a>
     </div>
 
-    <!-- SLIDE 2 - Data e botões -->
+    <!-- SLIDE 2 -->
     <div class="slide">
       <img src="page-2.png" alt="Data, horário e localização">
 
-      <!-- Confirma presença (botão amarelo do topo) -->
+      <!-- Confirma presença — centralizado no botão amarelo -->
       <a class="hotspot"
          href="https://w.app/xai4qy"
          target="_blank"
          rel="noopener"
-         style="left: 12%; top: 5%; width: 76%; height: 13%;"
+         style="left: 18%; top: 7%; width: 64%; height: 10%;"
          aria-label="Confirma presença"></a>
 
-      <!-- Localização -->
+      <!-- Localização — centralizado -->
       <a class="hotspot"
          href="https://maps.app.goo.gl/yXvWvF5MMQHV9s6E7?g_st=ic"
          target="_blank"
          rel="noopener"
-         style="left: 18%; top: 19%; width: 64%; height: 10%;"
+         style="left: 24%; top: 19%; width: 52%; height: 9%;"
          aria-label="Localização"></a>
 
-      <!-- Sugestão de presente (botão de baixo) -->
+      <!-- Sugestão de presente -->
       <a class="hotspot"
          href="#"
-         style="left: 15%; top: 84%; width: 70%; height: 10%;"
+         style="left: 18%; top: 84%; width: 64%; height: 9%;"
          aria-label="Sugestão de presente"
          onclick="goToSlide(2); return false;"></a>
     </div>
 
-    <!-- SLIDE 3 - Sugestão de presente -->
+    <!-- SLIDE 3 -->
     <div class="slide">
       <img src="page-3.png" alt="Sugestão de presente">
     </div>
@@ -117,7 +115,6 @@
 
   <script>
     const carousel = document.getElementById('carousel');
-
     function goToSlide(index) {
       carousel.scrollTo({
         left: index * carousel.clientWidth,

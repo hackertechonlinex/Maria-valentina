@@ -43,84 +43,117 @@
       scroll-snap-stop: always;
       position: relative;
       background: #1a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
       display: block;
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
     }
 
+    /* Hotspots serão posicionados em pixels pelo JS */
     .hotspot {
       position: absolute;
       z-index: 5;
       cursor: pointer;
       background: transparent;
       border: none;
-      -webkit-tap-highlight-color: rgba(230, 57, 70, 0.25);
+      -webkit-tap-highlight-color: rgba(230, 57, 70, 0.3);
     }
   </style>
 </head>
 <body>
   <div class="carousel" id="carousel">
 
-    <!-- SLIDE 1 - Capa -->
-    <div class="slide">
-      <img src="page-1.png" alt="Capa do convite - Maria Valentina">
-      <a class="hotspot"
-         href="#"
-         style="left: 15%; top: 45%; width: 70%; height: 32%;"
-         aria-label="Clique no selo e descubra"
-         onclick="goToSlide(1); return false;"></a>
+    <!-- SLIDE 1 -->
+    <div class="slide" data-slide="0">
+      <img src="page-1.png" alt="Capa" id="img0">
+      <a class="hotspot" data-for="selo" href="#" onclick="goToSlide(1); return false;" aria-label="Clique no selo"></a>
     </div>
 
     <!-- SLIDE 2 -->
-    <div class="slide">
-      <img src="page-2.png" alt="Data, horário e localização">
-
-      <!-- Confirma presença — centralizado no botão amarelo -->
-      <a class="hotspot"
-         href="https://w.app/xai4qy"
-         target="_blank"
-         rel="noopener"
-         style="left: 18%; top: 7%; width: 64%; height: 10%;"
-         aria-label="Confirma presença"></a>
-
-      <!-- Localização — centralizado -->
-      <a class="hotspot"
-         href="https://maps.app.goo.gl/yXvWvF5MMQHV9s6E7?g_st=ic"
-         target="_blank"
-         rel="noopener"
-         style="left: 24%; top: 19%; width: 52%; height: 9%;"
-         aria-label="Localização"></a>
-
-      <!-- Sugestão de presente -->
-      <a class="hotspot"
-         href="#"
-         style="left: 18%; top: 84%; width: 64%; height: 9%;"
-         aria-label="Sugestão de presente"
-         onclick="goToSlide(2); return false;"></a>
+    <div class="slide" data-slide="1">
+      <img src="page-2.png" alt="Detalhes" id="img1">
+      <a class="hotspot" data-for="confirma" href="https://w.app/xai4qy" target="_blank" rel="noopener" aria-label="Confirma presença"></a>
+      <a class="hotspot" data-for="local" href="https://maps.app.goo.gl/yXvWvF5MMQHV9s6E7?g_st=ic" target="_blank" rel="noopener" aria-label="Localização"></a>
+      <a class="hotspot" data-for="sugestao" href="#" onclick="goToSlide(2); return false;" aria-label="Sugestão de presente"></a>
     </div>
 
     <!-- SLIDE 3 -->
-    <div class="slide">
-      <img src="page-3.png" alt="Sugestão de presente">
+    <div class="slide" data-slide="2">
+      <img src="page-3.png" alt="Sugestão de presente" id="img2">
     </div>
 
   </div>
 
   <script>
     const carousel = document.getElementById('carousel');
+
+    // Coordenadas em % da imagem original (0-100)
+    // Ajustadas visualmente para bater exatamente nos botões
+    const HOTSPOTS = {
+      selo:      { left: 18, top: 48, width: 64, height: 28 },
+      confirma:  { left: 18, top: 7.2, width: 64, height: 9.5 },
+      local:     { left: 26, top: 19.5, width: 48, height: 8 },
+      sugestao:  { left: 20, top: 85, width: 60, height: 8 }
+    };
+
+    function positionHotspots() {
+      document.querySelectorAll('.slide').forEach(slide => {
+        const img = slide.querySelector('img');
+        if (!img || !img.complete) return;
+
+        const slideRect = slide.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+
+        // Offset da imagem dentro do slide
+        const offsetX = imgRect.left - slideRect.left;
+        const offsetY = imgRect.top  - slideRect.top;
+        const imgW = imgRect.width;
+        const imgH = imgRect.height;
+
+        slide.querySelectorAll('.hotspot').forEach(hotspot => {
+          const key = hotspot.dataset.for;
+          const h = HOTSPOTS[key];
+          if (!h) return;
+
+          hotspot.style.left   = (offsetX + imgW * h.left   / 100) + 'px';
+          hotspot.style.top    = (offsetY + imgH * h.top    / 100) + 'px';
+          hotspot.style.width  = (imgW * h.width  / 100) + 'px';
+          hotspot.style.height = (imgH * h.height / 100) + 'px';
+        });
+      });
+    }
+
     function goToSlide(index) {
       carousel.scrollTo({
         left: index * carousel.clientWidth,
         behavior: 'smooth'
       });
     }
+
+    // Posiciona quando as imagens carregam e quando a tela gira/redimensiona
+    window.addEventListener('load', positionHotspots);
+    window.addEventListener('resize', positionHotspots);
+    window.addEventListener('orientationchange', () => setTimeout(positionHotspots, 200));
+
+    // Garante que rode mesmo se a imagem já estiver em cache
+    document.querySelectorAll('img').forEach(img => {
+      if (img.complete) positionHotspots();
+      else img.addEventListener('load', positionHotspots);
+    });
+
+    // Reposiciona um pouco depois do carregamento (alguns celulares precisam)
+    setTimeout(positionHotspots, 300);
+    setTimeout(positionHotspots, 800);
   </script>
 </body>
 </html>
